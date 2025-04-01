@@ -17,13 +17,17 @@ public class WebTest {
 
     public static void main(String[] args) {
         try{
-            testAutocomplete();
+            //testAutocomplete();
+            testButtons();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
             testUrl.quit();
         }
     }
+
+
+    // Тесты страниц
 
     public static void testAutocomplete() throws InterruptedException {
         WebElement autocompleteLink = testUrl.findElement(By.linkText("Autocomplete"));
@@ -38,7 +42,8 @@ public class WebTest {
         String[] zipCodes = {"10001", "90001", "60601"};
         String[] countries = {"USA", "USA", "USA"};
 
-        // Явное ожидание загрузки страницы
+        // Явное ожидание загрузки страницы(вернее ожидания пока
+        // не будет найден элемент, по конкретному параметру)
         WebDriverWait wait = new WebDriverWait(testUrl, java.time.Duration.ofSeconds(4));
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("autocomplete")));
 
@@ -52,13 +57,57 @@ public class WebTest {
         fillField(By.id("country"), countries[0]);
 
         Thread.sleep(3000);
+        // Возвращение к предыдущей страницы
         testUrl.navigate().back();
     }
+
+    public static void testButtons() throws InterruptedException {
+        // Переход на страницу "Buttons"
+        WebElement buttonsLink = testUrl.findElement(By.linkText("Buttons"));
+        buttonsLink.click();
+
+        WebDriverWait wait = new WebDriverWait(testUrl, java.time.Duration.ofSeconds(5));
+
+        // Первая группа кнопок
+        elementClick(By.className("btn-primary"));
+        elementClick(By.className("btn-success"));
+        elementClick(By.className("btn-info"));
+        elementClick(By.className("btn-warning"));
+        elementClick(By.className("btn-danger"));
+        elementClick(By.className("btn-link"));
+
+        // Вторая группа кнопок
+        elementClick(By.xpath("//button[text()='Left']"));
+        elementClick(By.xpath("//button[text()='Middle']"));
+        elementClick(By.xpath("//button[text()='Right']"));
+
+        // Третья группа кнопок
+        elementClick(By.xpath("//button[text()='1']"));
+        elementClick(By.xpath("//button[text()='2']"));
+        elementClick(By.id("btnGroupDrop1"));
+
+        // Пока оно не дружелюбно
+        //elementClick(By.cssSelector("a.dropdown-item"));
+
+        Thread.sleep(3000); // Задержка перед возвратом
+        testUrl.navigate().back(); // Возвращаемся на предыдущую страницу
+    }
+
+    // Функциональные методы
 
     // Метод для заполнения поля текстом
     private static void fillField(By locate, String value){
         WebElement field = testUrl.findElement(locate);
         field.clear(); // Очистка поля перед вводом
         field.sendKeys(value);
+    }
+
+
+    // Метод для нажатия на элемент
+    private static void elementClick(By locate) throws InterruptedException {
+        WebDriverWait wait = new WebDriverWait(testUrl, java.time.Duration.ofSeconds(3));
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locate));
+        element.click();
+        Thread.sleep(200);
     }
 }
