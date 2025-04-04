@@ -17,8 +17,10 @@ public class WebTest {
 
     public static void main(String[] args) {
         try{
-            //testAutocomplete();
+            testAutocomplete();
             testButtons();
+            testCheckboxes();
+            testDatepicker();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
@@ -28,6 +30,8 @@ public class WebTest {
 
 
     // Тесты страниц
+
+    //Тест страницы Autocomplete
 
     public static void testAutocomplete() throws InterruptedException {
         WebElement autocompleteLink = testUrl.findElement(By.linkText("Autocomplete"));
@@ -61,6 +65,8 @@ public class WebTest {
         testUrl.navigate().back();
     }
 
+    //Тест страницы Buttons
+
     public static void testButtons() throws InterruptedException {
         // Переход на страницу "Buttons"
         WebElement buttonsLink = testUrl.findElement(By.linkText("Buttons"));
@@ -88,6 +94,55 @@ public class WebTest {
 
         // Пока оно не дружелюбно
         //elementClick(By.cssSelector("a.dropdown-item"));
+
+        Thread.sleep(3000); // Задержка перед возвратом
+        testUrl.navigate().back(); // Возвращаемся на предыдущую страницу
+    }
+
+    //Тест страницы Checkbox
+
+    public static void testCheckboxes() throws InterruptedException {
+        // Переход на страницу "Checkboxes"
+        WebElement buttonsLink = testUrl.findElement(By.linkText("Checkbox"));
+        buttonsLink.click();
+
+        WebDriverWait wait = new WebDriverWait(testUrl, java.time.Duration.ofSeconds(5));
+
+        elementClick(By.id("checkbox-1"));
+        elementClick(By.id("checkbox-2"));
+        elementClick(By.id("checkbox-3"));
+        elementClick(By.id("checkbox-3"));
+        elementClick(By.id("checkbox-2"));
+        elementClick(By.id("checkbox-1"));
+
+        Thread.sleep(3000); // Задержка перед возвратом
+        testUrl.navigate().back(); // Возвращаемся на предыдущую страницу
+    }
+
+    //Тест страницы Datepicker
+
+    public static void testDatepicker() throws InterruptedException {
+        // Переход на страницу "Datepicker"
+        WebElement buttonsLink = testUrl.findElement(By.linkText("Datepicker"));
+        buttonsLink.click();
+
+        WebDriverWait wait = new WebDriverWait(testUrl, java.time.Duration.ofSeconds(5));
+
+        elementClick(By.id("datepicker"));
+        Thread.sleep(1000);
+        elementClick(By.xpath("//td[text()='16']"));
+        Thread.sleep(1000);
+        elementClick(By.id("datepicker"));
+        Thread.sleep(1000);
+        elementClick(By.className("datepicker-switch"));
+        Thread.sleep(1500);
+        elementClick(By.xpath("//th[@class='prev']"));
+        Thread.sleep(1500);
+        elementClick(By.xpath("//span[text()='Mar']"));
+        Thread.sleep(1500);
+        elementClick(By.xpath("//td[text()='9']"));
+
+
 
         Thread.sleep(3000); // Задержка перед возвратом
         testUrl.navigate().back(); // Возвращаемся на предыдущую страницу
